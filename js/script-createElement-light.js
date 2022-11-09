@@ -56,63 +56,41 @@ const arrImages = [
 	},
 ];
 
-const timeSlider = 1.5 * 1000;
-let direction = 1;
-
 const eleSliderViewer = document.querySelector('.slider-viewer');
 const eleSliderThumbs = document.querySelector('.thumbs');
+const eleBtnLeft = document.querySelector('.btn-left');
+const eleBtnRight = document.querySelector('.btn-right');
 
 // creare i tag immagine nell'html
 for (let i = 0; i < arrImages.length; i++) {
 	const objSlide = arrImages[i];
 	// creare le slide
-	eleSliderThumbs.innerHTML = eleSliderThumbs.innerHTML + `<img src="img/${objSlide.image}" class="thumb-img ${i === 0 ? 'active' : ''}">`;
-	eleSliderViewer.innerHTML += `
-		<div class="slide ${i === 0 ? 'active' : ''}">
-			<img src="img/${objSlide.image}" alt="${objSlide.title}">
-			<div class="text">
-				<h2>${objSlide.title}</h2>
-				<p>${objSlide.text}</p>
-			</div>
+	// creare il div .slide
+	const eleSlide = document.createElement('div'); // <div></div>
+	eleSlide.classList.add('slide'); // <div class="slide"></div>
+	eleSlide.innerHTML = `
+		<img src="img/${objSlide.image}" alt="${objSlide.title}">
+		<div class="text">
+			<h2>${objSlide.title}</h2>
+			<p>${objSlide.text}</p>
 		</div>
-	`
+	`;
+
+	if (i === 0) {
+		eleSlide.classList.add('active');
+	}
+	eleSliderViewer.append(eleSlide);
+
+	// creare i tag immagine che vanno nella sezione .thumbs
+	const eleThumb = document.createElement('img');
+	eleThumb.src = 'img/' + objSlide.image;
+	eleThumb.classList.add('thumb-img');
+	if (i === 0) {
+		eleThumb.classList.add('active');
+	}
+	eleSliderThumbs.append(eleThumb);
 }
-
-
-
-let idInterval = setInterval(() => {
-	if (direction > 0) {
-		moveRight();
-	} else {
-		moveLeft();
-	}
-}, timeSlider);
-
-document.querySelector('.btn-invert').addEventListener('click', () => direction *= -1);
-
-document.querySelector('.btn-start-stop').addEventListener('click', function() {
-	if (this.dataset.functionality === 'stop') {
-		console.log('stoppato');
-		clearInterval(idInterval);
-		this.innerHTML = 'Start';
-		this.dataset.functionality = 'start';
-	} else {
-		console.log('avviato');
-		idInterval = setInterval(() => {
-			if (direction > 0) {
-				moveRight();
-			} else {
-				moveLeft();
-			}
-		}, timeSlider);
-		this.innerHTML = 'Stop';
-		this.dataset.functionality = 'stop';
-	}
-})
-
-// questa selezione va messa dopo il ciclo perche' usando l'innerHTML ad ogni iterazione sono stati distrutti i bottoni originali e sono stati creati bottoni nuovi
-const eleBtnLeft = document.querySelector('.btn-left');
-const eleBtnRight = document.querySelector('.btn-right');
+// document.querySelector('.slider-img').classList.add('active');
 
 const listEleImg = document.querySelectorAll('.slide'); // non e' un array ma qualcosa di simile
 const listThumbs = document.querySelectorAll('.thumb-img');
@@ -121,11 +99,7 @@ let activeIndex = 0;
 document.body.style.backgroundImage = `url('img/${arrImages[activeIndex].image}')`;
 
 // aggiungere gli event listeners ai due bottoni
-eleBtnRight.addEventListener('click', moveRight);
-
-eleBtnLeft.addEventListener('click', moveLeft);
-
-function moveRight() {
+eleBtnRight.addEventListener('click', function () {
 	// togliere la classe active dall'elemento attivo corrente
 	listEleImg[activeIndex].classList.remove('active');
 	listThumbs[activeIndex].classList.remove('active');
@@ -139,9 +113,9 @@ function moveRight() {
 	listEleImg[activeIndex].classList.add('active');
 	listThumbs[activeIndex].classList.add('active');
 	document.body.style.backgroundImage = `url('img/${arrImages[activeIndex].image}')`;
-}
+});
 
-function moveLeft() {
+eleBtnLeft.addEventListener('click', function () {
 	// togliere la classe active dall'elemento attivo corrente
 	listEleImg[activeIndex].classList.remove('active');
 	listThumbs[activeIndex].classList.remove('active');
@@ -155,4 +129,4 @@ function moveLeft() {
 	listEleImg[activeIndex].classList.add('active');
 	listThumbs[activeIndex].classList.add('active');
 	document.body.style.backgroundImage = `url('img/${arrImages[activeIndex].image}')`;
-}
+});
