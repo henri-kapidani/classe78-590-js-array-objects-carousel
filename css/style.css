@@ -10,13 +10,20 @@ body {
 }
 
 .container-blur {
-	display: flex;
 	height: 100%;
 	backdrop-filter: blur(20px);
 }
 
+.contents {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 2rem;
+	height: 100%;
+}
+
 .slider {
-	margin: auto;
 	height: 80%;
 	width: 60%;
 	max-width: 600px;
